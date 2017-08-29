@@ -11,9 +11,6 @@
 
 #include "public.h"
 
-#ifdef _USE_DSC_
-#include "dsc.h"
-#endif
 
 #ifdef _OUT_RECORD_
 #define display_dcc_record_info()
