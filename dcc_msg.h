@@ -14,6 +14,8 @@
 #ifdef _LITTLE_ENDIAN_
 #include <endian.h>
 #else
+/* big endian order do not use this be64toh function*/
+#undef be64toh
 #define	be64toh(x)    (x)
 #endif
 
