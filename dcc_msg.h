@@ -3,11 +3,20 @@
 
 #include <arpa/inet.h>
 #include <sys/types.h>
-#include <endian.h>
+
+
 #include "dcc_debug.h"
 #include "store_info.h"
 
 #define  GET_AVP_NODE_LEN(len)  ((len)%4 == 0 ? (len) :((len) +4 - (len)%4))
+
+
+#ifdef _LITTLE_ENDIAN_
+#include <endian.h>
+#else
+#define	be64toh(x)    (x)
+#endif
+
 
 
 
@@ -16,7 +25,7 @@
 /*the attribute struct of message head*/
 typedef struct _dcca_msg_head_cmd_t
 {
-#ifdef LITTLE_ENDIAN 
+#ifdef _LITTLE_ENDIAN_ 
 
         unsigned int    rsvd :4;                /**< Reserved */
         unsigned int    t    :1;                /**< Potentially re-transmitted */
@@ -44,7 +53,7 @@ typedef struct __dcca_msg_head_bit_len_t
 /*the struct of message head*/
 
 typedef struct  _dcca_msg_head_t{
-		DCC_BIT_LEN_T   bit_len;                /**< ver:8 + len:24 */
+        DCC_BIT_LEN_T   bit_len;                /**< ver:8 + len:24 */
         DCCA_MSG_CMD_T  command;                /**< command flags */
         unsigned int    uiAppID;                /**< Application-ID */
         unsigned int    uiHbh;                  /**< Hop-by-Hop Identifier */
@@ -57,7 +66,7 @@ typedef struct  _dcca_msg_head_t{
 /*the attribute struct of message head*/
 typedef struct _dcca_avp_node_flag_t
 {
-#ifdef LITTLE_ENDIAN 
+#ifdef _LITTLE_ENDIAN_
         unsigned int    rsvd :5;                /**< Reserved **/
         unsigned int    p    :1;                /**< 指明为保证端到端安全需要加密 */
         unsigned int    m    :1;                /**< Must 指明对该AVP的支持是否是必需的 */

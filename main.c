@@ -87,7 +87,6 @@ int trim_dcc_buff( const char *szSrc, char *szDst  , int *time_sec)
     *time_sec = atoi( t_sec );
     if( *time_sec < 0 || *time_sec > 6000 )
         return -2;
-//    fprintf(stderr,"[%s],[%d]\n",t_sec, *time_sec);
     
     while( *pSrc != '\0' )
     {

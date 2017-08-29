@@ -1,0 +1,36 @@
+
+
+## -D _DEBUG_ : 开启调试模式，输出每行解析信息
+## -D _OUT_RECORD_ : 开启输出每条解析字段记录信息 ##
+## -D LITTLE_ENDIAN : 开启小端序主机解析方法
+
+
+#DEBUG_FLAGS	=	-D _OUT_RECORD_   -D_DEBUG_
+
+LDFLAGS		=  -lpthread -lm
+
+CFLAGS      =   -O2  $(DEBUG_FLAGS) 
+TARGET1     =   dcc_flow
+
+CC		=	cc -q64  
+
+
+OBJS1		=	dcc_msg.o public.o main.o store_info.o 
+
+all:${TARGET1}
+
+${TARGET1}:${OBJS1}
+	${CC} -o $@ ${OBJS1} ${LDFLAGS}
+
+${TARGET1}:${OBJS1}
+	${CC} -o $@ ${OBJS1} ${LDFLAGS}
+
+*.o:*.c
+	${CC} -c $<
+
+clean:
+	@rm -f *.o core
+
+purge:
+	@rm -f ${TARGET1}
+

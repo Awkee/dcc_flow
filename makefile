@@ -2,7 +2,7 @@
 
 ## -D _DEBUG_ : 开启调试模式，输出每行解析信息
 ## -D _OUT_RECORD_ : 开启输出每条解析字段记录信息 ##
-## -D LITTLE_ENDIAN : 开启小端序主机解析方法
+## -D _LITTLE_ENDIAN_ : 开启小端序主机解析方法
 
 
 DEBUG_FLAGS	=	-D _OUT_RECORD_  
@@ -10,7 +10,12 @@ CFLAGS 		=
 LDFLAGS		=  -lpthread -lm
 
 # 支持SDFS 开关 ##
-sdfs_flag = 0
+#sdfs_flag = 0
+#endian = little
+
+ifeq ($(endian),little)
+	CFLAGS  += -D _LITTLE_ENDIAN_
+endif
 
 ifeq ($(sdfs_flag),1)
 	CFLAGS 	+= -I${SDFS_HOME}/include -I${DSC_PATH}/include -D USE_SDFS
@@ -18,10 +23,10 @@ ifeq ($(sdfs_flag),1)
 endif
 
 ifeq ($(mode),debug)
-	CFLAGS 		+= 	-g -O2 -D LITTLE_ENDIAN ${DEBUG_FLAGS}
+	CFLAGS 		+= 	-g -O2 ${DEBUG_FLAGS}
 	TARGET1 	= 	dcc_flow_d
 else
-	CFLAGS      +=   -O2 -D LITTLE_ENDIAN
+	CFLAGS      +=   -O2 
 	TARGET1     =   dcc_flow
 endif
 

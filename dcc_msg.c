@@ -54,7 +54,11 @@ int decode_avp_node_value( const char *szData, int *iPos , int *iLen )
     pnode   = (DCCA_AVP_NODE_HEAD_T *) pData;
 	l_avp_node.avp_code = ntohl( pnode->avp_code );
 	memcpy( & l_avp_node.flag ,  &pnode->flag , sizeof( DCCA_AVP_FLAG_T ) );
+#ifdef _LITTLE_ENDIAN_
 	l_avp_node.flag.avp_length = ntohl( pnode->flag.avp_length << 8);
+#else
+	l_avp_node.flag.avp_length = ntohl( pnode->flag.avp_length );
+#endif
 
     /* avp_value_pos   = ( pnode->flag.v == 1 ? 12 : 8 );*/
     avp_value_pos   = ( l_avp_node.flag.v == 1 ? (DCCA_AVP_NODE_HEAD_LEN + 4) : DCCA_AVP_NODE_HEAD_LEN );
@@ -117,7 +121,11 @@ int deal_avp_node(const char *szData , int len )
         p       = (DCCA_AVP_NODE_HEAD_T *) pData ;
 	    l_avp_node.avp_code = ntohl(p->avp_code)  ;
 	    memcpy( & l_avp_node.flag , & p->flag , sizeof(DCCA_AVP_FLAG_T) );
+#ifdef _LITTLE_ENDIAN_
 		l_avp_node.flag.avp_length = ntohl( p->flag.avp_length << 8);
+#else
+		l_avp_node.flag.avp_length = ntohl( p->flag.avp_length );
+#endif
 
         ret = decode_avp_node_value(pData, &avp_value_pos , &avp_value_len );
         ASSERT( ret == 0 , "FILE:%s,FUNC:[%s],LINE:%d , return value:[%d]\n", __FILE__, __func__, __LINE__, ret );
@@ -312,8 +320,13 @@ int deal_msg_line( const char * szData , int time_sec )
     memset( & dcca_msg_head , 0 , sizeof( DCCA_MSG_HEAD_T ));
     memcpy( & dcca_msg_head.bit_len , & p_msg_head->bit_len , sizeof(DCC_BIT_LEN_T) );
     memcpy( & dcca_msg_head.command , & p_msg_head->command , sizeof(DCCA_MSG_CMD_T) );
+#ifdef _LITTLE_ENDIAN_
     dcca_msg_head.command.uiCmdCode = ntohl(p_msg_head->command.uiCmdCode << 8);
     dcca_msg_head.bit_len.uiLen = ntohl(p_msg_head->bit_len.uiLen << 8);
+#else
+    dcca_msg_head.command.uiCmdCode = ntohl(p_msg_head->command.uiCmdCode );
+    dcca_msg_head.bit_len.uiLen = ntohl(p_msg_head->bit_len.uiLen );
+#endif
 
     display_msg_head( & dcca_msg_head );
     if( dcca_msg_head.bit_len.ucVer == 1 )
