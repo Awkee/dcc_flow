@@ -1,0 +1,6 @@
+*.o
+dcc_flow
+dcc_flow_d
+core
+tags
+*.log
